@@ -1,0 +1,16 @@
+tokens
+config.yml
+.env
+*.env
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env311/
+outputs/
+logs/
+*.log
+.DS_Store
+*.filled.xlsx
+.cache/
+.outputs
