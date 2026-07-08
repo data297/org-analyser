@@ -1,0 +1,4 @@
+{
+  "example-service": "your-org/example-service",
+  "my-backend": "gitlab:my-group/my-backend"
+}

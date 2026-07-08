@@ -1,0 +1,56 @@
+# org-analyser runtime config.
+# Copy to config.yml (gitignored, so local paths/settings never get committed) and
+# edit. Every value here is only a default — the matching CLI flag always wins.
+# With everything filled in below, `org-analyser` runs with zero flags.
+
+# Python interpreter used for subprocess phases. Same effect as exporting
+# ORG_ANALYSER_PYTHON. Leave null to auto-detect the active venv.
+python: null
+
+# API tokens. Fill in whichever platform(s) you're running against.
+tokens:
+  github-data-token: null   # ghp_... — required for --github-org / --github-repo
+  gitlab_token: null        # glpat_... — required for --gitlab-group / --gitlab-project
+  openai_key: null          # sk-... — required unless OPENAI_API_KEY is set in the environment
+
+# Optional: path to a separate key=value tokens file instead of the `tokens:`
+# mapping above (same key names). Only set this if you want tokens split out
+# of config.yml; leave null to use `tokens:` above.
+tokens_file: null
+
+# Optional JSON map of folder_name -> owner/repo (or gitlab:group/repo), used by
+# --local-repos-dir runs to attach PR/profiler data to local checkouts.
+repos_manifest: null
+
+# Parent directory for timestamped run folders.
+output_dir: outputs/org-analyser-runs
+
+# Parallel repo workers.
+workers: 10
+
+# Retries per repo per phase.
+retries: 3
+
+# Git clone depth (0 = full clone).
+clone_depth: 0
+
+github_host: github.com
+gitlab_host: gitlab.com
+
+# Key in the tokens file that holds the GitHub API token.
+github_token_name: github-data-token
+
+# Skip the sealed repo-quality-score phase and org rollup.
+skip_quality_score: false
+
+# Batch label for --local-repos-dir runs (used in output paths/run folder name).
+local_batch_name: local
+
+# Default run target — set exactly ONE of these, or leave all null and always
+# pass --github-org/--github-repo/--gitlab-group/--gitlab-project/--local-repos-dir
+# on the command line instead.
+github_org: null
+github_repo: []       # e.g. ["your-org/repo-a", "your-org/repo-b"]
+gitlab_group: null
+gitlab_project: []    # e.g. ["your-group/repo-a"]
+local_repos_dir: null
