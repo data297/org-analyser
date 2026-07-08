@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import shutil
+import threading
 from pathlib import Path
 
 from openpyxl import load_workbook
 
 from .models import COLUMNS, ProfileResult
+
+_APPEND_LOCK = threading.Lock()
 
 
 def append_row(
@@ -20,21 +23,25 @@ def append_row(
     """Copy ``template`` to ``out`` (once) and append the result as a new data row.
 
     If ``out`` already exists it is appended to, so repeated runs accumulate rows.
+    Callers may run concurrently (e.g. one thread per repo), so the read-modify-write
+    cycle on the shared workbook is serialized to avoid corrupting the underlying zip.
     """
     template = Path(template)
     out = Path(out)
-    if not out.exists():
-        shutil.copy(template, out)
 
-    wb = load_workbook(out)
-    ws = wb[sheet]
+    with _APPEND_LOCK:
+        if not out.exists():
+            shutil.copy(template, out)
 
-    target_row = _first_empty_data_row(ws)
-    row_values = result.as_row()
-    for offset, value in enumerate(row_values):
-        ws.cell(row=target_row, column=offset + 1, value=_excel_safe(value))
+        wb = load_workbook(out)
+        ws = wb[sheet]
 
-    wb.save(out)
+        target_row = _first_empty_data_row(ws)
+        row_values = result.as_row()
+        for offset, value in enumerate(row_values):
+            ws.cell(row=target_row, column=offset + 1, value=_excel_safe(value))
+
+        wb.save(out)
     return out
 
 
