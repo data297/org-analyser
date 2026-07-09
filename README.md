@@ -7,6 +7,7 @@ Org/repo codebase analysis pipeline: merged-PR counts, PR task-profile, codebase
 ```
 python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install --upgrade pip   # need pip>=21.3 for editable installs (PEP 660)
 pip install -e .
 cp config.example.yml config.yml
 ```
