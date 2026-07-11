@@ -4,6 +4,8 @@ Org/repo codebase analysis pipeline: merged-PR counts, PR task-profile, codebase
 
 ## Setup
 
+Needs Python 3.10+ — [python.org/downloads](https://www.python.org/downloads/) (or `brew install python3` on macOS, `pyenv install 3.12` via [pyenv](https://github.com/pyenv/pyenv)).
+
 ```
 python3 -m venv .venv
 source .venv/bin/activate
@@ -13,7 +15,11 @@ cp config.example.yml config.yml
 ```
 
 
-Edit `config.yml` → fill in `tokens:` (`github-data-token`, `gitlab_token`, `openai_key` — only whichever platform(s) you use). `config.yml` is gitignored, never committed.
+Edit `config.yml` → fill in `tokens:` (only whichever platform(s) you use). `config.yml` is gitignored, never committed.
+
+- `github-data-token` — [github.com/settings/tokens](https://github.com/settings/tokens) (classic, `repo` scope)
+- `gitlab_token` — [gitlab.com/-/user_settings/personal_access_tokens](https://gitlab.com/-/user_settings/personal_access_tokens) (`read_api` scope)
+- `openai_key` — [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 
 ## Run
 
